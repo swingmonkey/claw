@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>倒计时</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>⏱️ 倒计时</h1>
+
+        <!-- 模式选择 -->
+        <div class="mode-selector">
+            <button class="mode-btn active" data-mode="target">目标时间</button>
+            <button class="mode-btn" data-mode="duration">倒计时时长</button>
+        </div>
+
+        <!-- 目标时间模式输入 -->
+        <div id="target-mode" class="input-section active">
+            <div class="input-group">
+                <label for="target-date">选择目标时间：</label>
+                <input type="datetime-local" id="target-date">
+            </div>
+        </div>
+
+        <!-- 倒计时时长模式输入 -->
+        <div id="duration-mode" class="input-section">
+            <div class="duration-inputs">
+                <div class="duration-input">
+                    <label>时</label>
+                    <input type="number" id="duration-hours" min="0" max="23" value="0">
+                </div>
+                <div class="duration-input">
+                    <label>分</label>
+                    <input type="number" id="duration-minutes" min="0" max="59" value="0">
+                </div>
+                <div class="duration-input">
+                    <label>秒</label>
+                    <input type="number" id="duration-seconds" min="0" max="59" value="0">
+                </div>
+            </div>
+        </div>
+
+        <!-- 控制按钮 -->
+        <div class="controls">
+            <button id="start-btn" class="btn btn-primary">开始</button>
+            <button id="pause-btn" class="btn btn-secondary" disabled>暂停</button>
+            <button id="reset-btn" class="btn btn-warning">重置</button>
+        </div>
+
+        <!-- 倒计时显示 -->
+        <div class="countdown-display" id="countdown-display">
+            <div class="time-unit">
+                <span class="time-value" id="days">00</span>
+                <span class="time-label">天</span>
+            </div>
+            <div class="time-unit">
+                <span class="time-value" id="hours">00</span>
+                <span class="time-label">时</span>
+            </div>
+            <div class="time-unit">
+                <span class="time-value" id="minutes">00</span>
+                <span class="time-label">分</span>
+            </div>
+            <div class="time-unit">
+                <span class="time-value" id="seconds">00</span>
+                <span class="time-label">秒</span>
+            </div>
+        </div>
+
+        <!-- 进度条 -->
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <!-- 状态消息 -->
+        <div class="status-message" id="status-message"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新闻详情 - 实时新闻聚合器</title>
+    <link rel="stylesheet" href="news.css">
+    <style>
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: var(--primary-hover);
+            transform: translateX(-4px);
+        }
+        
+        .detail-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .detail-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .detail-meta {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .detail-tag {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .detail-source {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            background: var(--border-color);
+            color: var(--text-secondary);
+        }
+        
+        .detail-time {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+        
+        .detail-title {
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1.4;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+        
+        .detail-content {
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+        
+        .detail-content p {
+            margin-bottom: 20px;
+        }
+        
+        .detail-actions {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            display: flex;
+            gap: 16px;
+        }
+        
+        .action-btn {
+            padding: 12px 24px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .action-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .action-btn.primary {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+        
+        .action-btn.primary:hover {
+            background: var(--primary-hover);
+            border-color: var(--primary-hover);
+        }
+        
+        .loading-detail {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            gap: 20px;
+        }
+        
+        .error-detail {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .error-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <button id="backBtn" class="back-btn">
+                    <span>←</span> 返回首页
+                </button>
+                <h1 class="title" style="font-size: 24px; margin: 0;">新闻详情</h1>
+            </div>
+        </header>
+        
+        <div id="detailContainer">
+            <div class="loading-detail">
+                <div class="spinner"></div>
+                <p>正在加载新闻详情...</p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="news.js"></script>
+    <script>
+        // 获取URL参数
+        const urlParams = new URLSearchParams(window.location.search);
+        const newsLink = urlParams.get('link');
+        const newsTitle = urlParams.get('title');
+        const newsSource = urlParams.get('source');
+        const newsCategory = urlParams.get('category');
+        const newsPubDate = urlParams.get('pubDate');
+        
+        // 返回首页
+        document.getElementById('backBtn').addEventListener('click', () => {
+            window.location.href = 'news.html';
+        });
+        
+        // 显示新闻详情
+        function showNewsDetail() {
+            if (!newsLink) {
+                showError();
+                return;
+            }
+            
+            const detailContainer = document.getElementById('detailContainer');
+            const categoryEmoji = getCategoryEmoji(newsCategory || 'general');
+            const timeAgo = getTimeAgo(newsPubDate || new Date().toISOString());
+            
+            detailContainer.innerHTML = `
+                <div class="detail-container">
+                    <div class="detail-header">
+                        <div class="detail-meta">
+                            <span class="detail-tag">${categoryEmoji} ${newsCategory || '综合'}</span>
+                            <span class="detail-source">${newsSource || '未知来源'}</span>
+                            <span class="detail-time">${timeAgo}</span>
+                        </div>
+                        <h1 class="detail-title">${decodeURIComponent(newsTitle || '新闻标题')}</h1>
+                    </div>
+                    
+                    <div class="detail-content">
+                        <p>点击下方按钮查看原文完整内容。</p>
+                        <p style="color: var(--text-secondary); font-style: italic;">
+                            由于版权和跨域限制，完整新闻内容需要跳转到原始网站查看。
+                        </p>
+                    </div>
+                    
+                    <div class="detail-actions">
+                        <a href="${decodeURIComponent(newsLink)}" target="_blank" class="action-btn primary">
+                            <span>🔗</span> 阅读原文
+                        </a>
+                        <button class="action-btn" onclick="copyLink()">
+                            <span>📋</span> 复制链接
+                        </button>
+                        <button class="action-btn" onclick="shareNews()">
+                            <span>📤</span> 分享
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function showError() {
+            const detailContainer = document.getElementById('detailContainer');
+            detailContainer.innerHTML = `
+                <div class="error-detail">
+                    <div class="error-icon">😕</div>
+                    <h2>未找到新闻</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 24px;">
+                        新闻链接无效或已过期
+                    </p>
+                    <button onclick="window.location.href='news.html'" class="back-btn">
+                        返回首页
+                    </button>
+                </div>
+            `;
+        }
+        
+        function copyLink() {
+            const link = decodeURIComponent(newsLink);
+            navigator.clipboard.writeText(link).then(() => {
+                alert('链接已复制到剪贴板！');
+            }).catch(() => {
+                // Fallback for older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = link;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                alert('链接已复制到剪贴板！');
+            });
+        }
+        
+        function shareNews() {
+            const link = decodeURIComponent(newsLink);
+            const title = decodeURIComponent(newsTitle);
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    url: link
+                }).catch(err => {
+                    console.log('Share failed:', err);
+                });
+            } else {
+                // Fallback: share to weibo
+                const shareUrl = `https://service.weibo.com/share/share.php?url=${encodeURIComponent(link)}&title=${encodeURIComponent(title)}`;
+                window.open(shareUrl, '_blank');
+            }
+        }
+        
+        // 初始化
+        showNewsDetail();
+    </script>
+</body>
+</html>

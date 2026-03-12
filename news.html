@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实时新闻聚合器</title>
+    <link rel="stylesheet" href="news.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">📰 实时新闻聚合器</h1>
+            <div class="controls">
+                <button id="refreshBtn" class="btn btn-primary">
+                    <span class="icon">🔄</span> 刷新新闻
+                </button>
+                <div class="auto-refresh">
+                    <label class="switch">
+                        <input type="checkbox" id="autoRefreshToggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span class="refresh-label">自动刷新 (60s)</span>
+                </div>
+                <button id="settingsBtn" class="btn btn-secondary">
+                    <span class="icon">⚙️</span> 设置
+                </button>
+            </div>
+        </header>
+
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="搜索新闻标题..." class="search-input">
+    <div class="category-filters">
+        <button class="category-btn active" data-category="all">全部</button>
+        <button class="category-btn" data-category="tech">科技</button>
+        <button class="category-btn" data-category="general">综合</button>
+        <button class="category-btn" data-category="business">财经</button>
+        <button class="category-btn" data-category="politics">时政</button>
+    </div>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="stat-label">总新闻数:</span>
+                <span class="stat-value" id="totalCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">上次更新:</span>
+                <span class="stat-value" id="lastUpdate">--:--:--</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">状态:</span>
+                <span class="stat-value status" id="statusIndicator">等待中</span>
+            </div>
+        </div>
+
+        <div id="newsContainer" class="news-container">
+            <div class="loading" id="loadingIndicator">
+                <div class="spinner"></div>
+                <p>正在加载新闻...</p>
+            </div>
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <span class="empty-icon">📭</span>
+                <h3>暂无新闻</h3>
+                <p>点击"刷新新闻"按钮获取最新资讯</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 设置弹窗 -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>新闻源设置</h2>
+                <button class="close-btn" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-group">
+                    <h3>选择新闻源</h3>
+                    <div class="news-sources">
+                        <label class="source-checkbox">
+                            <input type="checkbox" value="cctv" checked>
+                            <span>央视新闻</span>
+                        </label>
+                        <label class="source-checkbox">
+                            <input type="checkbox" value="xinhua" checked>
+                            <span>新华网</span>
+                        </label>
+                        <label class="source-checkbox">
+                            <input type="checkbox" value="people" checked>
+                            <span>人民网</span>
+                        </label>
+                        <label class="source-checkbox">
+                            <input type="checkbox" value="ifeng" checked>
+                            <span>凤凰网</span>
+                        </label>
+                        <label class="source-checkbox">
+                            <input type="checkbox" value="sina">
+                            <span>新浪新闻</span>
+                        </label>
+                        <label class="source-checkbox">
+                            <input type="checkbox" value="36kr" checked>
+                            <span>36氪</span>
+                        </label>
+                        <label class="source-checkbox">
+                            <input type="checkbox" value="tech163">
+                            <span>网易科技</span>
+                        </label>
+                        <label class="source-checkbox">
+                            <input type="checkbox" value="it之家" checked>
+                            <span>IT之家</span>
+                        </label>
+                        <label class="source-checkbox">
+                            <input type="checkbox" value="zhihu_daily">
+                            <span>知乎日报</span>
+                        </label>
+                        <label class="source-checkbox">
+                            <input type="checkbox" value="cnbeta">
+                            <span>cnBeta</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <h3>刷新间隔</h3>
+                    <select id="refreshInterval" class="interval-select">
+                        <option value="30000">30秒</option>
+                        <option value="60000" selected>60秒</option>
+                        <option value="120000">2分钟</option>
+                        <option value="300000">5分钟</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <h3>每页显示数量</h3>
+                    <select id="itemsPerPage" class="interval-select">
+                        <option value="10">10条</option>
+                        <option value="20" selected>20条</option>
+                        <option value="30">30条</option>
+                        <option value="50">50条</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="saveSettings" class="btn btn-primary">保存设置</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="news.js"></script>
+</body>
+</html>

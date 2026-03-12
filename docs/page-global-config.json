@@ -1,0 +1,14 @@
+{
+  "slideStyle": "tech",
+  "colorScheme": "Modern Tech Style",
+  "primaryColor": "#2563EB",
+  "accentColor1": "#0891B2",
+  "accentColor2": "#7C3AED",
+  "neutralColor": "#64748B",
+  "background": {
+    "type": "color",
+    "value": "#F8FAFC"
+  },
+  "fontTitle": "'Noto Sans SC', 'Roboto', sans-serif",
+  "fontBody": "'Noto Sans SC', 'Inter', sans-serif"
+}

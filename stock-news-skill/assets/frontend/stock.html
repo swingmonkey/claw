@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>股票实时资讯 - OpenClaw</title>
+    <link rel="stylesheet" href="stock.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">📈 股票实时资讯</h1>
+            <div class="controls">
+                <button id="refreshNewsBtn" class="btn btn-primary">
+                    <span>🔄</span> 刷新资讯
+                </button>
+                <button id="refreshQuotesBtn" class="btn btn-secondary">
+                    <span>📊</span> 刷新行情
+                </button>
+                <button id="settingsBtn" class="btn btn-secondary">
+                    <span>⚙️</span> 设置
+                </button>
+            </div>
+        </header>
+
+        <!-- Market Summary -->
+        <div class="market-summary" id="marketSummary">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>正在加载市场数据...</p>
+            </div>
+        </div>
+
+        <!-- Stock Quotes -->
+        <div class="section">
+            <h2 class="section-title">
+                <span>📊 自选股行情</span>
+                <button id="addStockBtn" class="btn-small">+ 添加</button>
+            </h2>
+            <div class="stock-list" id="stockList">
+                <div class="empty-state">
+                    <span>📭</span>
+                    <p>暂无自选股</p>
+                    <p class="small">点击"+ 添加"按钮添加股票</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- News Section -->
+        <div class="section">
+            <h2 class="section-title">
+                <span>📰 最新资讯</span>
+                <div class="news-filters">
+                    <button class="filter-btn active" data-source="eastmoney">东方财富</button>
+                    <button class="filter-btn" data-source="sina">新浪</button>
+                    <button class="filter-btn" data-source="10jqka">同花顺</button>
+                </div>
+            </h2>
+            <div class="news-list" id="newsList">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>正在加载资讯...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Stock Modal -->
+    <div id="addStockModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>添加自选股</h3>
+                <button class="close-btn" id="closeAddStock">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>股票代码</label>
+                    <input type="text" id="stockCodeInput" placeholder="例如: 000001, 600036" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>股票名称</label>
+                    <input type="text" id="stockNameInput" placeholder="例如: 平安银行" class="form-input">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmAddStock" class="btn btn-primary">确认添加</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>设置</h3>
+                <button class="close-btn" id="closeSettings">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-group">
+                    <label>自动刷新间隔 (秒)</label>
+                    <input type="number" id="autoRefreshInterval" value="30" min="10" max="300" class="form-input">
+                </div>
+                <div class="setting-group">
+                    <label>
+                        <input type="checkbox" id="autoRefreshEnabled" checked>
+                        启用自动刷新
+                    </label>
+                </div>
+                <div class="setting-group">
+                    <label>市场类型</label>
+                    <select id="marketType" class="form-select">
+                        <option value="cn">A股</option>
+                        <option value="hk">港股</option>
+                        <option value="us">美股</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="saveSettings" class="btn btn-primary">保存设置</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="stock.js"></script>
+</body>
+</html>
